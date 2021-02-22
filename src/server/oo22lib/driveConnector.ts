@@ -1,4 +1,4 @@
-import { currentOOversion, office, ooFolders, ooTables, ooVersions, systemMasterId, systemObject } from "./systemEnums";
+import { currentOOversion, office, ooFolders, ooTables, ooVersions, systemMasterId, systemMasterProperty, systemObject } from "./systemEnums";
 
 
 
@@ -55,7 +55,7 @@ export class DriveConnector {
         return spreadsheet;
     }
 
-    public getMasterProperty(name: string) { return this.getProperyFromTable(ooTables.systemMasterConfiguration, name); }
+    public getMasterProperty(name: systemMasterProperty|string) { return this.getProperyFromTable(ooTables.systemMasterConfiguration, name); }
 
     private getValuesCache(table: ooTables) {
         let valuesCache = this.ooConfigurationCache[table];
@@ -150,6 +150,7 @@ export function getNextVersion():ooVersions {
 }
 
 export function copyFolder(folderToCopyId:string,parentFolderId:string,oldVersion:ooVersions,newVersion:ooVersions){
+    if (folderToCopyId===parentFolderId)throw new Error ("copying a folder in itself would result in an endless loop");
     const parentFolder = DriveApp.getFolderById(parentFolderId);
     const folderToCopy = DriveApp.getFolderById(folderToCopyId);
     //create new Folder

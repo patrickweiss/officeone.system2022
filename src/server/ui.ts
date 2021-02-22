@@ -1,5 +1,5 @@
 import { copyFolder, DriveConnector, getNextVersion } from "./oo22lib/driveConnector";
-import { currentOOversion, ooTables, ooVersions } from "./oo22lib/systemEnums";
+import { currentOOversion, ooTables, ooVersions, systemMasterProperty } from "./oo22lib/systemEnums";
 
 export const onOpen = () => {
   const menu = SpreadsheetApp.getUi()
@@ -20,8 +20,18 @@ export const newVersion = () => {
   const versionFolder = DriveApp.getFileById(SpreadsheetApp.getActive().getId()).getParents().next();
   const systemFolder = versionFolder.getParents().next();
 
-  copyFolder(versionFolder.getId(),systemFolder.getId(),currentOOversion,getNextVersion())
+  //copy own system template folder
+  copyFolder(versionFolder.getId(),systemFolder.getId(),currentOOversion,getNextVersion());
+
+  //copy subsystem folder
+  const oo2021systemFolderId = office2022systemDC.getMasterProperty(systemMasterProperty.officeOne2021_TemplateFolderId);
+ if (oo2021systemFolderId){
+   const oo2021versionFolder = DriveApp.getFolderById(oo2021systemFolderId).getFoldersByName(currentOOversion).next();
+  const oo2021systemFolder = DriveApp.getFolderById(oo2021systemFolderId);
+  copyFolder(oo2021versionFolder.getId(),oo2021systemFolder.getId(),currentOOversion,getNextVersion());
+ }
+
  
-  SpreadsheetApp.getUi().alert("Subversion 0003");
+  SpreadsheetApp.getUi().alert("Subversion 0005");
 };
 

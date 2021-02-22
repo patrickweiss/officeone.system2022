@@ -7,6 +7,9 @@ export enum ooVersions{
 
 export const currentOOversion = ooVersions.oo55;
 
+export enum systemMasterProperty{
+    officeOne2021_TemplateFolderId="officeOne2021_TemplateFolderId"
+}
 
 export enum systemObject{
     officeArray="officeArray"
